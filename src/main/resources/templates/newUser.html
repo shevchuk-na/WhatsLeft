@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<!--suppress CheckEmptyScriptTag -->
+<html xmlns:th="http://www.w3.org/1000/xhtml" lang="en">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div th:replace="common/header :: navbar"/>
+<div class="container-fluid">
+    <div class="col-sm-4">
+        <h3>Create new user</h3>
+        <form th:if="!${userCreated}" th:action="@{/home/newUser}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" required="required" type="text" id="username" name="username"/>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input class="form-control" required="required" type="text" id="name" name="name"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" required="required" type="text" id="password" name="password"/>
+            </div>
+            <div class="form-group" th:if="${userIsAdmin}">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="radioIsAdmin" name="userRole" value="admin"/>
+                    <label class="form-check-label" for="radioIsAdmin">Admin</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="radioIsLeader" name="userRole" value="leader"/>
+                    <label class="form-check-label" for="radioIsLeader">Team leader</label>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Create new user</button>
+        </form>
+        <br/>
+        <div class="alert alert-success" role="alert" th:if="${userCreated}">User <span th:text="${username}"></span> successfully created</div>
+        <div class="alert alert-danger" role="alert" th:if="${usernameExists}">Username is taken</div>
+        <div class="alert alert-danger" role="alert" th:if="${noRoleSelected}">No role selected</div>
+        <a th:href="@{/}" th:if="${userCreated}" class="btn btn-primary">Go to login page</a>
+    </div>
+    <div class="col-sm-8">
+
+    </div>
+</div>
+<div th:replace="common/header :: body-bottom-scripts"/>
+</body>
+</html>

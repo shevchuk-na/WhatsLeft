@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<!--suppress CheckEmptyScriptTag -->
+<html xmlns:th="http://www.w3.org/1000/xhtml" lang="en">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div th:replace="common/header :: navbar"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Product: <span th:text="${product.name}"></span></h3>
+                    <h5>Category: <span th:text="${product.category.name}"></span></h5>
+                    <div id="productChanges" th:if="${product.changeList != null} and ${product.changeList.size() > 0}">
+                        <div>
+                            <table border="0" class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Change</th>
+                                    <th>Amount</th>
+                                    <th>User</th>
+                                    <th>Date</th>
+                                <tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="change : ${product.changeList}">
+                                    <div th:if="${change != null} and ${change.changeAmount != 0}">
+                                        <td><span th:if="${change.changeAmount > 0}">+</span><span th:text="${change.changeAmount}"></span></td>
+                                        <td th:text="${change.remainingAmount}"></td>
+                                        <td th:text="${change.user.name}"></td>
+                                        <td th:text="${#dates.format(change.created, 'dd MMM yyyy, HH:mm' )}"></td>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <a th:if="${shortList}" th:href="'javascript:productClicked(\'' + ${product.id} + '\', \'1\');'" class="btn btn-primary">Show full changelist</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form th:action="@{/home/newComment}" method="post">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="productIdAddComment" name="id" th:value="${product.id}"/>
+                            <textarea class="form-control" id="textAddComment" name="commentText" placeholder="Add your comment"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Add comment</button>
+                        </div>
+                    </form>
+                    <hr/>
+                </div>
+            </div>
+            <h3>Comments:</h3>
+            <div th:each="comment:${product.commentList}" class="row">
+                <div class="col-sm-12">
+                    <div th:id="commentBody + ${comment.id}">
+                        <span th:text="${comment.user.name}"></span><span>: </span><span th:text="${comment.text}"></span>
+                        <br/>
+                        <span>Posted on </span><span th:text="${#dates.format(comment.created)}"></span>
+                        <div th:if="${user.id} == ${comment.user.id}">
+                            <span><a th:href="'javascript:editComment(\'' + ${comment.id} + '\');'">Edit</a> <a
+                                    th:href="@{/home/deleteComment(id=${comment.id})}">Delete</a></span>
+                        </div>
+                    </div>
+                    <div th:id="commentEdit + ${comment.id}" style="display: none">
+                        <form th:action="@{/home/editComment}" method="post">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="productIdEditComment" name="id" th:value="${comment.id}"/>
+                                <input class="form-control" name="commentText" th:value="${comment.text}"/>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Edit comment</button>
+                            </div>
+                        </form>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div th:if="${userIsAdmin} == null">
+                <h3>Your team:</h3>
+                <div th:if="${teamList.size() == 0}">
+                    <span>Your team is empty</span>
+                </div>
+                <div th:if="${teamList.size()} > 0">
+                    <table border="0" id="teamList" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Username</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${teamList}">
+                            <div th:if="${user != null}">
+                                <td><span th:text="${user.name}"></span></td>
+                                <td><span th:text="${user.username}"></span></td>
+                            </div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/header :: body-bottom-scripts"/>
+</body>
+</html>

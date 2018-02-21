@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--suppress CheckEmptyScriptTag -->
+<html xmlns:th="http://www.w3.org/1000/xhtml" lang="en">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div th:replace="common/header :: navbar"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <br/>
+            <div class="alert alert-danger" th:if="${incorrectPassword}"><strong>Incorrect password</strong></div>
+            <div class="alert alert-success" th:if="${updateSuccessful}"><strong>Update success</strong></div>
+            <form th:action="@{/updateProfile}" method="post">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" th:value="${user.name}"/>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" readonly/>
+                </div>
+                <div class="form-group">
+                    <label for="txtNewPassword">New password</label>&nbsp;<span id="checkPasswordMatch"></span>
+                    <input type="password" class="form-control" id="txtNewPassword" name="newPassword"/>
+                    <label for="txtConfirmPassword">Confirm new password</label>
+                    <input type="password" class="form-control" id="txtConfirmPassword"/>
+                    <p style="color:#828282">To change password enter new one</p>
+                </div>
+
+
+                <button id="updateProfileButton" type="submit" class="btn btn-primary">Save all</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="common/header :: body-bottom-scripts"/>
+</body>
+</html>

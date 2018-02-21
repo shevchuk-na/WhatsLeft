@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.w3.org/1000/xhtml" lang="en">
+<head th:replace="common/header :: common-header"></head>
+
+<body>
+<div th:replace="common/header :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Add product</h3>
+            <div class="alert alert-success" role="alert" th:if="${productCreated} != null">Product <span th:text="${productCreated.name}"></span> successfully created</div>
+            <div class="alert alert-danger" role="alert" th:if="${productExists}">Product already exists</div>
+            <form th:action="@{/home/createNewProduct}" method="post">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input class="form-control" required="required" type="text" id="productName" name="productName"/>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Product category</label>
+                    <select class="custom-select my-1 mr-sm-2" id="productCategory" name="productCategory">
+                        <option th:each="category : ${teamCategories}"
+                                th:value="${category.id}"
+                                th:utext="${category.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productAmount">Initial amount</label>
+                    <input class="form-control" required="required" type="number" id="productAmount" name="productAmount"/>
+                </div>
+                <div class="form-group">
+                    <label for="productAmount">Default change amount</label>
+                    <input class="form-control" required="required" type="number" step="1" id="productDefaultChange" name="productDefaultChange"/>
+                </div>
+                <button class="btn btn-primary" type="submit">Create new product</button>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <h4>Categories</h4>
+            <table border="0" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Products</th>
+                    <!--<th>Actions</th>-->
+                <tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${teamCategories}">
+                    <div>
+                        <td th:text="${category.name}"></td>
+                        <td th:text="${category.products.size()}"></td>
+
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-danger" th:if="${categoryNameIsEmpty}" style="color: red;">Category name is empty</div>
+            <div class="alert alert-danger" th:if="${noTeamAssigned}" style="color: red;">You are not in a team</div>
+            <div class="alert alert-success" th:if="${categoryCreated != null}">Category <span th:text="${categoryCreated.name}"></span> created</div>
+            <div class="alert alert-success" th:if="${categoryDeleted != null}">Category <span th:text="${categoryDeleted.name}"></span> deleted</div>
+            <a href="javascript:addNewCategoryForm();" class="btn btn-primary" id="addNewCategoryButton">Add new category</a> <a class="btn btn-primary"
+                                                                                                                                 href="javascript:deleteCategoryForm();"
+                                                                                                                                 id="deleteCategoryButton" th:if="${userIsLeader}">Remove
+            category</a>
+            <form th:action="@{/home/createNewCategory}" method="post" id="addNewCategoryForm" style="display: none">
+                <div class="form-group">
+                    <label for="addNewCategoryName">Category name</label>
+                    <input class="form-control" required="required" type="text" id="addNewCategoryName" name="category"/>
+                </div>
+                <button class="btn btn-primary" type="submit">Create new category</button>
+                <a href="javascript:cancelCategoryForms();" class="btn btn-primary" id="cancelAddNewCategoryButton">Cancel</a>
+            </form>
+            <form th:action="@{/home/deleteCategory}" method="post" id="deleteCategoryForm" style="display: none" th:if="${userIsLeader}">
+                <div class="form-group">
+                    <label for="deteleCategoryName">Category name</label>
+                    <select class="custom-select my-1 mr-sm-2" id="deteleCategoryName" name="categoryId">
+                        <option th:each="category: ${teamCategories}" th:value="${category.id}"><span th:text="${category.name}"></span></option>
+                    </select>
+                    <p>CAUTION! ALL PRODUCTS IN CATEGORY WILL BE DELETED!</p>
+                </div>
+                <button class="btn btn-danger" type="submit">Delete category</button>
+                <a href="javascript:cancelCategoryForms();" class="btn btn-primary" id="cancelDeleteCategoryButton">Cancel</a>
+            </form>
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+</div>
+<div th:replace="common/header :: body-bottom-scripts"/>
+</body>
+</html>
