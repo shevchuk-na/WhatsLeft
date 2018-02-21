@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/home")
@@ -268,11 +269,11 @@ public class HomeController {
     }
 
     @RequestMapping(value = "product")
-    public String product(Model model, @RequestParam("id") Long id, @RequestParam("fullChangeList") int fullChangeList, Principal principal) {
+    public String product(Model model, @RequestParam("id") Long id, @RequestParam("fullChangeList") Optional<Integer> fullChangeList, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         Product product = productService.findById(id);
         if (product.getTeamLeader().equals(user.getLeader())) {
-            if (fullChangeList == 0) {
+            if (!fullChangeList.isPresent() || fullChangeList.get() == 0) {
                 product.setChangeList(changeService.findLast10ByProductId(product.getId()));
                 model.addAttribute("shortList", true);
             }
