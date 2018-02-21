@@ -33,16 +33,18 @@ public class HomeController {
     private final ProductService productService;
     private final ChangeService changeService;
     private final CommentService commentService;
+    private final RequestService requestService;
 
     @Autowired
     public HomeController(UserService userService, RoleRepository roleRepository, CategoryService categoryService, ProductService productService, ChangeService changeService,
-                          CommentService commentService) {
+                          CommentService commentService, RequestService requestService) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.categoryService = categoryService;
         this.productService = productService;
         this.changeService = changeService;
         this.commentService = commentService;
+        this.requestService = requestService;
     }
 
 
@@ -76,6 +78,8 @@ public class HomeController {
             model.addAttribute("undoDisabled", true);
         } else {
             model.addAttribute("userIsAdmin", true);
+            List<Request> requestList = requestService.findAllRequests();
+            model.addAttribute("requestList", requestList);
         }
         return model;
     }
@@ -182,13 +186,10 @@ public class HomeController {
     @RequestMapping(value = "createNewCategory", method = RequestMethod.POST)
     public String createNewCategoryPost(Model model, @ModelAttribute("category") String name, Principal principal, RedirectAttributes redirect) {
         User user = userService.findByUsername(principal.getName());
-        model.addAttribute("categoryNameIsEmpty", false);
-        model.addAttribute("noTeamAssigned", false);
-        model.addAttribute("categoryCreated", null);
         if (user.getLeader() == null) {
-            model.addAttribute("noTeamAssigned", true);
+            redirect.addFlashAttribute("noTeamAssigned", true);
         } else if (name.isEmpty()) {
-            model.addAttribute("categoryNameIsEmpty", true);
+            redirect.addFlashAttribute("categoryNameIsEmpty", true);
         } else {
             Category category = new Category();
             category.setName(name);
@@ -196,7 +197,6 @@ public class HomeController {
             category = categoryService.save(category);
             redirect.addFlashAttribute("categoryCreated", category);
         }
-        model = prepareHomeModel(model, user);
         return "redirect:createNewProduct";
     }
 
@@ -211,8 +211,6 @@ public class HomeController {
 
             }
         }
-        model.addAttribute("teamCategories", categoryService.findByTeamLeaderId(user.getLeader().getId()));
-        model = prepareHomeModel(model, user);
         return "redirect:createNewProduct";
     }
 
@@ -291,7 +289,6 @@ public class HomeController {
             return "redirect:";
 
         }
-
     }
 
     @RequestMapping(value = "/newComment", method = RequestMethod.POST)

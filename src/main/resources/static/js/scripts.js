@@ -197,3 +197,8 @@ function editComment(id) {
     $(commentBody).hide();
     $(commentEdit).show();
 }
+
+function leaveRequestForm() {
+    $("#leaveRequestButton").hide();
+    $("#leaveRequestForm").show();
+}

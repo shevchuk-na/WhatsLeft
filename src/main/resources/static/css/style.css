@@ -32,6 +32,20 @@ table {
     flex-wrap: nowrap;
 }
 
+.btn-primary {
+    background-color: #2e9afe;
+    border-color: #81bef7;
+}
+
+.btn-warning:disabled {
+    background-color: #d8d8d8;
+    border-color: #d8d8d8;
+}
+
+.jumbotron {
+    background-color: white;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;

@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/js/**",
             "/image/**",
             "/",
+            "/newRequest",
             "/login",
             "/webfonts/**"
     };
