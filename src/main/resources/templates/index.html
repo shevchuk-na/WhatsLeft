@@ -10,16 +10,15 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="jumbotron">
-                <h1 class="display-4">Учет товаров проще!</h1>
-                <p class="lead">Создайте свой виртуальный склад и отслеживайте остатки товаров с нашей системой</p>
-                <p class="lead">Удобный совместный доступ к данным</p>
+                <h1 class="display-4">Inventory tracking, only simpler</h1>
+                <p class="lead">Allow your team to have constant access to current inventory status</p>
                 <hr class="my-4">
-                <p sec:authorize="isAnonymous()">Оставьте заявку и попробуйте работать с нам проще</p>
-                <p sec:authorize="isAuthenticated()">Рады видеть Вас снова! </p>
+                <p sec:authorize="isAnonymous()">Leave a request and we will create an account for you</p>
+                <p sec:authorize="isAuthenticated()">Glad to see you again</p>
                 <div class="alert alert-success" th:if="${requestLeft}">Request sent! We will contact you shortly!</div>
                 <p class="lead" th:if="!${requestLeft}">
                     <a sec:authorize="isAuthenticated()" th:href="@{/home}" class="btn btn-primary">Go to home screen</a>
-                    <a sec:authorize="isAnonymous()" href="javascript:leaveRequestForm();" id="leaveRequestButton" class="btn btn-primary">Оставить заявку</a>
+                    <a sec:authorize="isAnonymous()" href="javascript:leaveRequestForm();" id="leaveRequestButton" class="btn btn-primary">Leave request</a>
                 <form th:action="@{/newRequest}" method="post" id="leaveRequestForm" style="display: none">
                     <div class="form-group">
                         <label for="leaveRequestEmail">Your email</label>
