@@ -2,6 +2,7 @@ package ru.whatsleft.domain;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,9 +18,12 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
-    @OneToMany
-    @JoinColumn(name = "replyto_id")
-    private List<Comment> replyTo;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    private List<Comment> replyList = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String text;
@@ -58,12 +62,20 @@ public class Comment {
         this.product = product;
     }
 
-    public List<Comment> getReplyTo() {
-        return replyTo;
+    public Comment getParent() {
+        return parent;
     }
 
-    public void setReplyTo(List<Comment> replyTo) {
-        this.replyTo = replyTo;
+    public void setParent(Comment parent) {
+        this.parent = parent;
+    }
+
+    public List<Comment> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<Comment> replyList) {
+        this.replyList = replyList;
     }
 
     public String getText() {

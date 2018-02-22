@@ -281,8 +281,16 @@ public class HomeController {
                 model.addAttribute("shortList", false);
             }
             product.getChangeList().sort(ChangeComparatorByDateDecs.getInstance());
+            sortComments(product.getCommentList());
             product.getCommentList().sort(CommentComparatorByDateDecs.getInstance());
             model = prepareHomeModel(model, user);
+            List<Comment> nonRootComments = new ArrayList<>();
+            for (Comment comment : product.getCommentList()) {
+                if (comment.getParent() != null) {
+                    nonRootComments.add(comment);
+                }
+            }
+            product.getCommentList().removeAll(nonRootComments);
             model.addAttribute("product", product);
             return "product";
         } else {
@@ -292,14 +300,26 @@ public class HomeController {
         }
     }
 
+    private void sortComments(List<Comment> commentList) {
+        commentList.sort(CommentComparatorByDateDecs.getInstance());
+        for (Comment comment : commentList) {
+            sortComments(comment.getReplyList());
+        }
+    }
+
     @RequestMapping(value = "/newComment", method = RequestMethod.POST)
-    public String newCommentPost(Model model, @ModelAttribute("id") String productId, @ModelAttribute("commentText") String commentText, Principal principal) {
+    public String newCommentPost(Model model, @ModelAttribute("id") String productId, @ModelAttribute("commentText") String commentText, @ModelAttribute("parentId") String parentId,
+                                 Principal principal) {
         User user = userService.findByUsername(principal.getName());
         Product product = productService.findById(Long.parseLong(productId));
         Comment newComment = new Comment();
         newComment.setUser(user);
         newComment.setProduct(product);
         newComment.setText(commentText);
+        if (!parentId.equals("")) {
+            Comment parentComment = commentService.findById(Long.parseLong(parentId));
+            newComment.setParent(parentComment);
+        }
         newComment.setCreated(DateUtils.createNow().toInstant());
         newComment = commentService.save(newComment);
         return "redirect:product?id=" + product.getId();
@@ -321,13 +341,21 @@ public class HomeController {
     }
 
     @RequestMapping(value = "deleteComment")
-    public String deleteComment(Model model, @RequestParam("id") String id, Principal principal) {
+    public String deleteComment(Model model, @ModelAttribute("id") String id, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         Comment comment = commentService.findById(Long.parseLong(id));
         if (!user.getId().equals(comment.getUser().getId())) {
             model.addAttribute("unauthorized", true);
         } else {
-            commentService.delete(comment.getId());
+            if (comment.getReplyList().isEmpty()) {
+                if (comment.getParent() != null) {
+                    comment.getParent().getReplyList().remove(comment);
+                }
+                commentService.delete(comment.getId());
+            } else {
+                comment.setText("[ deleted ]");
+                commentService.save(comment);
+            }
         }
         return "redirect:product?id=" + comment.getProduct().getId();
     }

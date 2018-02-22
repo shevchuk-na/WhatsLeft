@@ -46,6 +46,10 @@ table {
     background-color: white;
 }
 
+.commentText {
+    font-weight: bold;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;

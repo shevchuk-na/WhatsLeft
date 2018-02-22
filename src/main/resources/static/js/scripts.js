@@ -193,9 +193,48 @@ function productClicked(id, fullChangeList) {
 
 function editComment(id) {
     const commentBody = "#commentBody" + id;
+    const commentReply = "#commentReply" + id;
     const commentEdit = "#commentEdit" + id;
-    $(commentBody).hide();
+    const commentDelete = "#commentDelete" + id;
+    $(commentBody).hide()
+    $(commentReply).hide();
     $(commentEdit).show();
+    $(commentDelete).hide();
+}
+
+function cancelEditComment(id) {
+    const commentBody = "#commentBody" + id;
+    const commentEdit = "#commentEdit" + id;
+    $(commentBody).show();
+    $(commentEdit).hide();
+}
+
+function replyComment(id) {
+    const commentReply = "#commentReply" + id;
+    const commentEdit = "#commentEdit" + id;
+    const commentDelete = "#commentDelete" + id;
+    $(commentReply).show();
+    $(commentEdit).hide();
+    $(commentDelete).hide();
+}
+
+function cancelReplyComment(id) {
+    const commentReply = "#commentReply" + id;
+    $(commentReply).hide();
+}
+
+function deleteComment(id) {
+    const commentReply = "#commentReply" + id;
+    const commentEdit = "#commentEdit" + id;
+    const commentDelete = "#commentDelete" + id;
+    $(commentReply).hide();
+    $(commentEdit).hide();
+    $(commentDelete).show();
+}
+
+function cancelDeleteComment(id) {
+    const commentDelete = "#commentDelete" + id;
+    $(commentDelete).hide();
 }
 
 function leaveRequestForm() {
