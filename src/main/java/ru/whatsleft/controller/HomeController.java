@@ -130,43 +130,44 @@ public class HomeController {
             @ModelAttribute("name") String name,
             @ModelAttribute("password") String password,
             @ModelAttribute("userRole") String userRole,
-            Model model
+            Model model,
+            RedirectAttributes redirect
     ) {
         User user = userService.findByUsername(principal.getName());
         User newUser;
         try {
             if (userIsAdmin(user)) {
                 if (userService.findByUsername(username) != null) {
-                    model.addAttribute("usernameExists", true);
-                    model.addAttribute("userIsAdmin", true);
-                    return "newUser";
+                    redirect.addFlashAttribute("usernameExists", true);
+                    return "redirect:newUser";
                 } else {
-                    if (userRole.equals("admin")) {
-                        Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN);
-                        newUser = createUser(roleAdmin, username, name, password, null);
-                    } else if (userRole.equals("leader")) {
-                        Role roleLeader = roleRepository.findByName(RoleEnum.ROLE_LEADER);
-                        newUser = createUser(roleLeader, username, name, password, null);
-                        Category category = new Category();
-                        category.setName(" --- ");
-                        category.setTeamLeader(newUser);
-                        category = categoryService.save(category);
-                    } else {
-                        model.addAttribute("noRoleSelected", true);
-                        model.addAttribute("userIsAdmin", true);
-                        return "newUser";
+                    switch (userRole) {
+                        case "admin":
+                            Role roleAdmin = roleRepository.findByName(RoleEnum.ROLE_ADMIN);
+                            newUser = createUser(roleAdmin, username, name, password, null);
+                            break;
+                        case "leader":
+                            Role roleLeader = roleRepository.findByName(RoleEnum.ROLE_LEADER);
+                            newUser = createUser(roleLeader, username, name, password, null);
+                            Category category = new Category();
+                            category.setName(" --- ");
+                            category.setTeamLeader(newUser);
+                            category = categoryService.save(category);
+                            break;
+                        default:
+                            redirect.addFlashAttribute("noRoleSelected", true);
+                            return "redirect:newUser";
                     }
                 }
             } else if (userIsLeader(user)) {
                 if (userService.findByUsername(username) != null) {
-                    model.addAttribute("usernameExists", true);
-                    model.addAttribute("userIsLeader", true);
-                    return "newUser";
+                    redirect.addFlashAttribute("usernameExists", true);
+                    return "redirect:newUser";
                 } else {
                     newUser = createUser(null, username, name, password, user);
                 }
             } else {
-                model.addAttribute("unauthorized", true);
+                redirect.addFlashAttribute("unauthorized", true);
                 return "home";
             }
         } catch (Exception e) {
@@ -177,11 +178,10 @@ public class HomeController {
             }
             System.out.println(e.getMessage());
             e.printStackTrace();
-            return "newUser";
+            return "redirect:newUser";
         }
-        model.addAttribute("userCreated", true);
-        model.addAttribute("username", username);
-        return "newUser";
+        redirect.addFlashAttribute("newUser", newUser);
+        return "redirect:newUser";
     }
 
     @RequestMapping(value = "createNewCategory", method = RequestMethod.POST)
@@ -202,7 +202,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "deleteCategory", method = RequestMethod.POST)
-    public String deleteCatogoryPost(Model model, @ModelAttribute("categoryId") Long categoryId, Principal principal, RedirectAttributes redirect) {
+    public String deleteCategoryPost(Model model, @ModelAttribute("categoryId") Long categoryId, Principal principal, RedirectAttributes redirect) {
         User user = userService.findByUsername(principal.getName());
         if (userIsLeader(user)) {
             Category categoryToDelete = categoryService.findById(categoryId);

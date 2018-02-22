@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="col-sm-4">
         <h3>Create new user</h3>
-        <form th:if="!${userCreated}" th:action="@{/home/newUser}" method="post">
+        <form th:if="${newUser} == null" th:action="@{/home/newUser}" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input class="form-control" required="required" type="text" id="username" name="username"/>
@@ -35,10 +35,10 @@
             <button class="btn btn-primary" type="submit">Create new user</button>
         </form>
         <br/>
-        <div class="alert alert-success" role="alert" th:if="${userCreated}">User <span th:text="${username}"></span> successfully created</div>
+        <div class="alert alert-success" role="alert" th:if="${newUser} != null">User <span th:text="${newUser.username}"></span> successfully created</div>
         <div class="alert alert-danger" role="alert" th:if="${usernameExists}">Username is taken</div>
         <div class="alert alert-danger" role="alert" th:if="${noRoleSelected}">No role selected</div>
-        <a th:href="@{/}" th:if="${userCreated}" class="btn btn-primary">Go to login page</a>
+        <a th:href="@{/home}" th:if="${newUser} != null" class="btn btn-primary">Go to home page</a>
     </div>
     <div class="col-sm-8">
 
