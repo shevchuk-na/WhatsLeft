@@ -33,7 +33,8 @@ Configure an Apache/Nginx virtual host and header redirects.
 
 ## Built With
 
-* [Spring Boot](https://projects.spring.io/spring-boot/) - The web framework used
+* [Spring Boot](https://projects.spring.io/spring-boot/) - Web framework
+* [Thymeleaf](https://www.thymeleaf.org) - Template engine
 * [Maven](https://maven.apache.org/) - Dependency Management
 
 ## Authors
