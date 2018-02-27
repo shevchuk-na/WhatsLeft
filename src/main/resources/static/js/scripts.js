@@ -31,8 +31,30 @@ function calculateChangeAmount(defaultAmount) {
     }
 }
 
+
+$("input[id*='input']").on("change, paste, keyup", function () {
+    changeButton(this.id);
+});
+
+function changeButton(inputid) {
+    let inputId = inputid;
+    let amount = $("#" + inputId).val();
+    if (amount < 0) {
+        amount = Math.abs(amount);
+        $("#" + inputId).val(amount);
+    }
+    const id = inputId.replace("input", "");
+    const addButtonId = "#addButton" + id;
+    const removeButtonId = "#removeButton" + id;
+    $(addButtonId).html("<i class=\"fas fa-angle-double-up\"></i> <span>" + amount + "</span>")
+    $(removeButtonId).html("<i class=\"fas fa-angle-double-down\"></i> <span>" + amount + "</span>")
+}
+
+
 function addInputAmount(id, defaultAmount) {
     const inputId = "#input" + id;
+    const addButtonId = "#addButton" + id;
+    const removeButtonId = "#removeButton" + id;
     let inputAmount;
     let changeAmount = calculateChangeAmount(defaultAmount);
     if (!$(inputId).val()) {
@@ -46,10 +68,14 @@ function addInputAmount(id, defaultAmount) {
         }
     }
     $(inputId).val(inputAmount);
+    $(addButtonId).html("<i class=\"fas fa-angle-double-up\"></i> <span>" + inputAmount.toString() + "</span>")
+    $(removeButtonId).html("<i class=\"fas fa-angle-double-down\"></i> <span>" + inputAmount.toString() + "</span>")
 }
 
 function removeInputAmount(id, defaultAmount) {
     const inputId = "#input" + id;
+    const addButtonId = "#addButton" + id;
+    const removeButtonId = "#removeButton" + id;
     let inputAmount;
     let changeAmount = calculateChangeAmount(defaultAmount);
     if (!$(inputId).val()) {
@@ -63,6 +89,8 @@ function removeInputAmount(id, defaultAmount) {
         }
     }
     $(inputId).val(inputAmount);
+    $(addButtonId).html("<i class=\"fas fa-angle-double-up\"></i> <span>" + inputAmount.toString() + "</span>")
+    $(removeButtonId).html("<i class=\"fas fa-angle-double-down\"></i> <span>" + inputAmount.toString() + "</span>")
 }
 
 function addNewCategoryForm() {
@@ -89,6 +117,17 @@ function cancelCategoryForms() {
     $("#deleteCategoryForm").hide();
 }
 
+function addAmount(productId) {
+    const inputId = "#input" + productId;
+    const amount = $(inputId).val();
+    sendAjaxChange(productId, amount)
+}
+
+function removeAmount(productId) {
+    const inputId = "#input" + productId;
+    const amount = -$(inputId).val();
+    sendAjaxChange(productId, amount)
+}
 
 function sendAjaxChange(productId, amount) {
 
@@ -143,28 +182,25 @@ function sendAjaxChange(productId, amount) {
                         $.each(this.products, function () {
                             let product = data.result[i].products[j];
                             div_category += "<tr>";
-                            div_category += "<td class=\"align-middle\" onclick=\"javascript:productClicked(\'" + product.id + "\', \'0\');\">" + product.name + "</td>";
-                            div_category += "<td class=\"align-middle\" onclick=\"javascript:productClicked(\'" + product.id + "\', \'0\');\">" + product.amount + "</td>"
+                            div_category += "<td class=\"align-middle\" onclick=\"productClicked(\'" + product.id + "\', \'0\');\">" + product.name + "</td>";
+                            div_category += "<td class=\"align-middle\" onclick=\"productClicked(\'" + product.id + "\', \'0\');\">" + product.amount + "</td>"
                             div_category += "<td>\n" +
                                 "<div class=\"btn-toolbar w-100 justify-content-center\">\n" +
-                                "<button class=\"btn btn-primary m-1\" onclick=\"javascript:sendAjaxChange(\'" + product.id + "\',\'" + product.defaultChange + "\');\"><i\n" +
+                                "<button class=\"btn btn-primary m-1\" onclick=\"addAmount(\'" + product.id + "\');\" id=\"addButton" + product.id + "\"><i\n" +
                                 "class=\"fas fa-angle-double-up\"></i> <span>" + product.defaultChange + "</span></button>\n" +
-                                "<button class=\"btn btn-primary m-1\" onclick=\"javascript:sendAjaxChange(\'" + product.id + "\', \'" + 'input' + "\');\"><i class=\"fas" +
-                                " fa-angle-up\"></i></button>\n" +
                                 "<div class=\"input-group m-1 w-50\">\n" +
                                 "<div class=\"input-group-prepend\">\n" +
-                                "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"javascript:removeInputAmount(\'" + product.id + "\',\'" +
+                                "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"removeInputAmount(\'" + product.id + "\',\'" +
                                 product.defaultChange + "\');\"><i class=\"fas fa-angle-left\"></i></button>\n" +
                                 "</div>\n" +
-                                "<input type=\"number\" step=\"1\" class=\"form-control\" id=\"input" + product.id + "\">\n" +
+                                "<input type=\"number\" step=\"1\" class=\"form-control\" id=\"input" + product.id + "\" value=\"" + product.defaultChange + "\">\n" +
                                 "<div class=\"input-group-append\">\n" +
-                                "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"javascript:addInputAmount(\'" + product.id + "\',\'" +
+                                "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"addInputAmount(\'" + product.id + "\',\'" +
                                 product.defaultChange + "\');\"><i class=\"fas fa-angle-right\"></i></button>\n" +
                                 "</div>\n" +
                                 "</div>\n" +
-                                "<button class=\"btn btn-primary m-1\" onclick=\"javascript:sendAjaxChange(\'" + product.id + "\',\'" + '-input' + "\');\"><i\n" +
-                                "class=\"fas fa-angle-down\"></i></button>\n" +
-                                "<button class=\"btn btn-primary m-1\" onclick=\"javascript:sendAjaxChange(\'" + product.id + "\', \'" + "-" + product.defaultChange + "\');\"><i\n" +
+                                "<button class=\"btn btn-primary m-1\" onclick=\"removeAmount(\'" + product.id + "\');\"" +
+                                " id=\"removeButton" + product.id + "\"><i\n" +
                                 "class=\"fas fa-angle-double-down\"></i> <span>" + product.defaultChange + "</span></button>\n" +
                                 "</div>\n" +
                                 "</td>";
@@ -179,6 +215,9 @@ function sendAjaxChange(productId, amount) {
                 });
                 $("#inventory").html(div_inventory);
                 $("#btnUndo").prop('disabled', false);
+                $("input[id*='input']").on("change, paste, keyup", function () {
+                    changeButton(this.id);
+                });
             },
             error: function (textStatus) {
                 console.log(textStatus);
