@@ -173,9 +173,9 @@ function sendAjaxChange(productId, amount) {
                         div_category += "<table border=\"0\" class=\"table table-hover table-sm\">\n" +
                             "<thead>\n" +
                             "<tr>\n" +
-                            "<th class=\"w-30\">Name</th>\n" +
-                            "<th class=\"w-10\">Amount</th>\n" +
-                            "<th class=\"w-60\" style=\"text-align: center\">Actions</th>\n" +
+                            "<th class=\"w-35\">Name</th>\n" +
+                            "<th class=\"w-15\">Amount</th>\n" +
+                            "<th class=\"w-50\" style=\"text-align: center\">Actions</th>\n" +
                             "<tr>\n" +
                             "</thead>\n" +
                             "<tbody>\n";
@@ -188,12 +188,12 @@ function sendAjaxChange(productId, amount) {
                                 "<div class=\"btn-toolbar w-100 justify-content-center\">\n" +
                                 "<button class=\"btn btn-primary m-1\" onclick=\"addAmount(\'" + product.id + "\');\" id=\"addButton" + product.id + "\"><i\n" +
                                 "class=\"fas fa-angle-double-up\"></i> <span>" + product.defaultChange + "</span></button>\n" +
-                                "<div class=\"input-group m-1 w-50\">\n" +
+                                "<div class=\"input-group m-1\">\n" +
                                 "<div class=\"input-group-prepend\">\n" +
                                 "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"removeInputAmount(\'" + product.id + "\',\'" +
                                 product.defaultChange + "\');\"><i class=\"fas fa-angle-left\"></i></button>\n" +
                                 "</div>\n" +
-                                "<input type=\"number\" step=\"1\" class=\"form-control\" id=\"input" + product.id + "\" value=\"" + product.defaultChange + "\">\n" +
+                                "<input type=\"number\" step=\"1\" class=\"form-control d-none d-sm-block\" id=\"input" + product.id + "\" value=\"" + product.defaultChange + "\">\n" +
                                 "<div class=\"input-group-append\">\n" +
                                 "<button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"addInputAmount(\'" + product.id + "\',\'" +
                                 product.defaultChange + "\');\"><i class=\"fas fa-angle-right\"></i></button>\n" +
