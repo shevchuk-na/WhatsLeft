@@ -1,11 +1,11 @@
 <!doctype html>
-<!--suppress HtmlUnknownTarget -->
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<!--suppress HtmlUnknownTarget, ThymeleafVariablesResolveInspection -->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head th:fragment="common-header">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>What's left?</title>
+    <title th:text="#{header.title}"></title>
 
     <!-- Bootstrap core CSS -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
@@ -19,9 +19,9 @@
 <body>
 <div th:fragment="navbar">
     <nav class="navbar navbar-expand-lg navbar-light mb-2" style="background-color: #cee3f6">
-        <a class="navbar-brand" th:href="@{/}">
+        <a class="navbar-brand" th:href="@{/}" th:text="#{header.title}">
             <img src="/image/clipboard.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            What's Left?
+
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -32,18 +32,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/home}">Home</a>
+                    <a class="nav-link" th:href="@{/home}" th:text="#{header.home}"></a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="#">Products</a>
+                    <a class="nav-link" href="#" th:text="#{header.products}"></a>
                 </li>
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/profile}">Profile</a>
+                    <a class="nav-link" th:href="@{/profile}" th:text="#{header.profile}"></a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    <a class="nav-link" th:href="@{/logout}" th:text="#{header.logout}"></a>
                 </li>
             </ul>
         </div>
@@ -59,7 +59,7 @@
     </footer>
     <div class="copyright">
         <div class="col-md-6">
-            <p>All rights reserved</p>
+
         </div>
         <div class="col-md-6">
 
@@ -82,9 +82,12 @@
                 </div>
                 <span>Posted on </span><span th:text="${#dates.format(nextComment.created)}"></span>
                 <div>
-                        <span><a th:href="'javascript:replyComment(\'' + ${nextComment.id} + '\');'" style="padding-right: 20px">Reply</a>
-                            <a th:href="'javascript:editComment(\'' + ${nextComment.id} + '\');'" th:if="${user.id} == ${nextComment.user.id}">Edit</a>
-                            <a th:href="'javascript:deleteComment(\'' + ${nextComment.id} + '\');'" th:if="${user.id} == ${nextComment.user.id}">Delete</a></span>
+                        <span><a th:href="'javascript:replyComment(\'' + ${nextComment.id} + '\');'"
+                                 style="padding-right: 20px" th:text="#{header.reply}"></a>
+                            <a th:href="'javascript:editComment(\'' + ${nextComment.id} + '\');'"
+                               th:if="${user.id} == ${nextComment.user.id}" th:text="#{header.edit}"></a>
+                            <a th:href="'javascript:deleteComment(\'' + ${nextComment.id} + '\');'"
+                               th:if="${user.id} == ${nextComment.user.id}" th:text="#{header.del}"></a></span>
                 </div>
             </div>
             <div th:id="commentDelete + ${nextComment.id}" style="display: none">
@@ -93,10 +96,10 @@
                         <input type="hidden" class="form-control" name="id" th:value="${nextComment.id}"/>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Delete comment</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{header.delComment}"></button>
                         <a th:href="'javascript:cancelDeleteComment(\'' + ${nextComment.id} + '\');'"
                            class="btn btn-primary"
-                           style="margin-left: 10px">Cancel</a>
+                           style="margin-left: 10px" th:text="#{header.cancel}"></a>
                     </div>
                 </form>
             </div>
@@ -107,10 +110,10 @@
                         <input class="form-control" required="required" name="commentText" th:value="${nextComment.text}"/>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Edit comment</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{header.editCom}"></button>
                         <a th:href="'javascript:cancelEditComment(\'' + ${nextComment.id} + '\');'"
                            class="btn btn-primary"
-                           style="margin-left: 10px">Cancel</a>
+                           style="margin-left: 10px" th:text="#{header.cancel}"></a>
                     </div>
                 </form>
             </div>
@@ -122,9 +125,9 @@
                         <input class="form-control" required="required" name="commentText"/>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Reply</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{header.reply}"></button>
                         <a th:href="'javascript:cancelReplyComment(\'' + ${nextComment.id} + '\');'" class="btn btn-primary"
-                           style="margin-left: 10px">Cancel</a>
+                           style="margin-left: 10px" th:text="#{header.cancel}"></a>
                     </div>
                 </form>
             </div>

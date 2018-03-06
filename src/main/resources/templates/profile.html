@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!--suppress CheckEmptyScriptTag -->
-<html xmlns:th="http://www.w3.org/1000/xhtml" lang="en">
+<!--suppress CheckEmptyScriptTag, ThymeleafVariablesResolveInspection -->
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/header :: common-header"/>
 
 <body>
@@ -9,27 +9,27 @@
     <div class="row">
         <div class="col-sm-6">
             <br/>
-            <div class="alert alert-danger" th:if="${incorrectPassword}"><strong>Incorrect password</strong></div>
-            <div class="alert alert-success" th:if="${updateSuccessful}"><strong>Update success</strong></div>
+            <div class="alert alert-danger" th:if="${incorrectPassword}"><strong th:text="#{profile.incorrectPassword}"></strong></div>
+            <div class="alert alert-success" th:if="${updateSuccessful}"><strong th:text="#{profile.updateSuccess}"></strong></div>
             <form th:action="@{/updateProfile}" method="post">
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name" th:text="#{profile.name}"></label>
                     <input type="text" class="form-control" id="name" name="name" th:value="${user.name}"/>
                 </div>
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username" th:text="#{profile.username}"></label>
                     <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" readonly/>
                 </div>
                 <div class="form-group">
-                    <label for="txtNewPassword">New password</label>&nbsp;<span id="checkPasswordMatch"></span>
+                    <label for="txtNewPassword" th:text="#{profile.newPassword}"></label>&nbsp;<span id="checkPasswordMatch"></span>
                     <input type="password" class="form-control" id="txtNewPassword" name="newPassword"/>
-                    <label for="txtConfirmPassword">Confirm new password</label>
+                    <label for="txtConfirmPassword" th:text="#{profile.confrmNewPassword}"></label>
                     <input type="password" class="form-control" id="txtConfirmPassword"/>
-                    <p style="color:#828282">To change password enter new one</p>
+                    <p style="color:#828282" th:text="#{profile.changePassword}"></p>
                 </div>
 
 
-                <button id="updateProfileButton" type="submit" class="btn btn-primary">Save all</button>
+                <button id="updateProfileButton" type="submit" class="btn btn-primary" th:text="#{profile.saveAll}"></button>
             </form>
         </div>
     </div>

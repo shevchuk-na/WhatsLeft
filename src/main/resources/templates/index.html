@@ -16,16 +16,16 @@
                 <p sec:authorize="isAnonymous()" th:text="#{index.hello_anon}"></p>
                 <p sec:authorize="isAuthenticated()" th:text="#{index.hello_auth}"></p>
 
-                <div class="alert alert-success" th:if="${requestLeft}">Request sent! We will contact you shortly!</div>
+                <div class="alert alert-success" th:if="${requestLeft}" th:text="#{index.request_sent}"></div>
                 <p class="lead" th:if="!${requestLeft}">
-                    <a sec:authorize="isAuthenticated()" th:href="@{/home}" class="btn btn-primary">Go to home screen</a>
-                    <a sec:authorize="isAnonymous()" href="javascript:leaveRequestForm();" id="leaveRequestButton" class="btn btn-primary">Leave request</a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/home}" class="btn btn-primary" th:text="#{index.go_home_button}"></a>
+                    <a sec:authorize="isAnonymous()" href="javascript:leaveRequestForm();" id="leaveRequestButton" class="btn btn-primary" th:text="#{index.leave_request_button}"></a>
                 <form th:action="@{/newRequest}" method="post" id="leaveRequestForm" style="display: none">
                     <div class="form-group">
-                        <label for="leaveRequestEmail">Your email</label>
+                        <label for="leaveRequestEmail" th:text="#{index.email}"></label>
                         <input class="form-control" required="required" type="text" id="leaveRequestEmail" name="email"/>
                     </div>
-                    <button class="btn btn-primary" type="submit">Leave request</button>
+                    <button class="btn btn-primary" type="submit" th:text="#{index.leave_request_button}"></button>
                 </form>
                 </p>
             </div>
@@ -36,28 +36,28 @@
         </div>
         <div class="col-sm-2">
             <br/>
-            <div class="alert alert-danger" th:if="${param.error != null}" style="color: red;">Incorrect username or password</div>
+            <div class="alert alert-danger" th:if="${param.error != null}" style="color: red;" th:text="#{index.incorrect_username}"></div>
             <form sec:authorize="isAnonymous()" th:action="@{/login}" method="post">
                 <div class="form-group">
-                    <label for="username">Username:</label>
+                    <label for="username" th:text="#{index.username}"></label>
                     <input required="required" type="text" class="form-control" id="username" name="username"/>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password:</label>
+                    <label for="password" th:text="#{index.password}"></label>
                     <input required="required" type="password" class="form-control" id="password" name="password"/>
                 </div>
                 <div class="form-group">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me"/>
-                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                        <label class="form-check-label" for="rememberMe" th:text="#{index.remember_me}"></label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Log in</button>
+                <button type="submit" class="btn btn-primary" th:text="#{index.log_in}"></button>
             </form>
             <div sec:authorize="isAuthenticated()">
-                <h3>Your username:</h3>
+                <h3 th:text="#{index.your_username}"></h3>
                 <span th:text="${user.username}"></span>
-                <h3>Your name:</h3>
+                <h3 th:text="#{index.your_name}"></h3>
                 <span th:text="${user.name}"></span>
             </div>
         </div>

@@ -10,16 +10,16 @@
         <div class="col-md-8">
             <div class="row">
                 <div class="col-sm-12" th:if="!${userIsAdmin}">
-                    <h3>Inventory:</h3>
+                    <h3 th:text="#{home.greeting}"></h3>
                     <div id="inventory">
                         <div th:each="category : ${teamCategories}" th:if="${category.products.size()} > 0">
                             <h4 th:text="${category.name}"></h4>
                             <table border="0" class="table table-hover table-sm">
                                 <thead>
                                 <tr>
-                                    <th class="w-35">Name</th>
-                                    <th class="w-15">Amount</th>
-                                    <th class="w-50" style="text-align: center">Actions</th>
+                                    <th class="w-35" th:text="#{home.name}"></th>
+                                    <th class="w-15" th:text="#{home.amount}"></th>
+                                    <th class="w-50" style="text-align: center" th:text="#{home.action}"></th>
                                 <tr>
                                 </thead>
                                 <tbody>
@@ -58,14 +58,14 @@
                     </div>
                 </div>
                 <div class="col-sm-12" th:if="${userIsAdmin}">
-                    <h3>Requests:</h3>
+                    <h3 th:text="#{home.requests}"></h3>
                     <div th:each="request : ${requestList}" th:if="${requestList.size()} > 0">
                         <table border="0" class="table table-hover table-sm">
                             <thead>
                             <tr>
-                                <th>Email</th>
-                                <th>Created</th>
-                                <th>Responded</th>
+                                <th th:text="#{home.email}"></th>
+                                <th th:text="#{home.created}"></th>
+                                <th th:text="#{home.responded}"></th>
                             <tr>
                             </thead>
                             <tbody>
@@ -83,24 +83,25 @@
         <div class="col-md-2">
             <div th:if="!${userIsAdmin}">
                 <form th:action="@{/home/undoLastChange}" method="post" class="mt-4">
-                    <button class="btn btn-warning" type="submit" id="btnUndo" th:disabled="${undoDisabled}">Undo last change</button>
+                    <button class="btn btn-warning" type="submit" id="btnUndo" th:disabled="${undoDisabled}"
+                            th:text="#{home.undo}"></button>
                 </form>
                 <hr/>
-                <a th:href="@{/home/createNewProduct}" class="btn btn-primary">Add new product</a>
+                <a th:href="@{/home/createNewProduct}" class="btn btn-primary" th:text="#{home.add}"></a>
             </div>
         </div>
         <div class="col-md-2">
             <div th:if="${userIsAdmin} == null">
-                <h3>Your team:</h3>
+                <h3 th:text="#{home.team}"></h3>
                 <div th:if="${teamList.size() == 0}">
-                    <span>Your team is empty</span>
+                    <span th:text="#{home.empty}"></span>
                 </div>
                 <div th:if="${teamList.size()} > 0">
                     <table border="0" id="teamList" class="table table-hover">
                         <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Username</th>
+                            <th scope="col" th:text="#{home.teamname}"></th>
+                            <th scope="col" th:text="#{home.username}"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -114,7 +115,8 @@
                     </table>
                 </div>
             </div>
-            <a th:if="${userIsAdmin} or  ${userIsLeader}" th:href="@{/home/newUser}" class="btn btn-primary">Create new user</a>
+            <a th:if="${userIsAdmin} or  ${userIsLeader}" th:href="@{/home/newUser}" class="btn btn-primary"
+               th:text="#{home.newuser}"></a>
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--suppress CheckEmptyScriptTag, ThymeleafVariablesResolveInspection -->
-<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="common/header :: common-header"/>
 
 <body>
@@ -11,17 +11,17 @@
         <div class="col-sm-6">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3>Product: <span th:text="${product.name}"></span></h3>
-                    <h5>Category: <span th:text="${product.category.name}"></span></h5>
+                    <h3><span th:text="#{product.product}"></span><span th:text="${product.name}"></span></h3>
+                    <h5><span th:text="#{product.category}"></span><span th:text="${product.category.name}"></span></h5>
                     <div id="productChanges" th:if="${product.changeList != null} and ${product.changeList.size() > 0}">
                         <div>
                             <table border="0" class="table">
                                 <thead>
                                 <tr>
-                                    <th>Change</th>
-                                    <th>Amount</th>
-                                    <th>User</th>
-                                    <th>Date</th>
+                                    <th th:text="#{product.change}"></th>
+                                    <th th:text="#{product.amount}"></th>
+                                    <th th:text="#{product.user}"></th>
+                                    <th th:text="#{product.date}"></th>
                                 <tr>
                                 </thead>
                                 <tbody>
@@ -35,7 +35,8 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <a th:if="${shortList}" th:href="'javascript:productClicked(\'' + ${product.id} + '\', \'1\');'" class="btn btn-primary">Show full changelist</a>
+                            <a th:if="${shortList}" th:href="'javascript:productClicked(\'' + ${product.id} + '\', \'1\');'" class="btn btn-primary"
+                               th:text="#{product.showFullChangelist}"></a>
                         </div>
                     </div>
                 </div>
@@ -47,16 +48,16 @@
                     <form th:action="@{/home/newComment}" method="post">
                         <div class="form-group">
                             <input type="hidden" class="form-control" name="id" th:value="${product.id}"/>
-                            <textarea class="form-control" id="textAddComment" name="commentText" placeholder="Add your comment"></textarea>
+                            <textarea class="form-control" id="textAddComment" name="commentText" th:placeholder="#{product.commentPlaceholder}"></textarea>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Add comment</button>
+                            <button type="submit" class="btn btn-primary" th:text="#{product.addComment}"></button>
                         </div>
                     </form>
                     <hr/>
                 </div>
             </div>
-            <h3>Comments:</h3>
+            <h3 th:text="#{product.comments}"></h3>
             <div th:each="comment:${product.commentList}" class="row">
                 <div class="col-sm-12">
                     <div th:id="commentBody + ${comment.id}">
@@ -65,9 +66,9 @@
                         </div>
                         <span>Posted on </span><span th:text="${#dates.format(comment.created)}"></span>
                         <div>
-                        <span><a th:href="'javascript:replyComment(\'' + ${comment.id} + '\');'" style="padding-right: 20px">Reply</a>
-                            <a th:href="'javascript:editComment(\'' + ${comment.id} + '\');'" th:if="${user.id} == ${comment.user.id}">Edit</a>
-                            <a th:href="'javascript:deleteComment(\'' + ${comment.id} + '\');'" th:if="${user.id} == ${comment.user.id}">Delete</a></span>
+                        <span><a th:href="'javascript:replyComment(\'' + ${comment.id} + '\');'" style="padding-right: 20px" th:text="#{product.reply}"></a>
+                            <a th:href="'javascript:editComment(\'' + ${comment.id} + '\');'" th:if="${user.id} == ${comment.user.id}" th:text="#{product.edit}"></a>
+                            <a th:href="'javascript:deleteComment(\'' + ${comment.id} + '\');'" th:if="${user.id} == ${comment.user.id}" th:text="#{product.delete}"></a></span>
                         </div>
                     </div>
                     <div th:id="commentDelete + ${comment.id}" style="display: none">
@@ -76,10 +77,10 @@
                                 <input type="hidden" class="form-control" name="id" th:value="${comment.id}"/>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Delete comment</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{product.deleteComment}"></button>
                                 <a th:href="'javascript:cancelDeleteComment(\'' + ${comment.id} + '\');'"
                                    class="btn btn-primary"
-                                   style="margin-left: 10px">Cancel</a>
+                                   style="margin-left: 10px" th:text="#{product.cancel}"></a>
                             </div>
                         </form>
                     </div>
@@ -90,10 +91,10 @@
                                 <input class="form-control" required="required" name="commentText" th:value="${comment.text}"/>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Edit comment</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{product.editComment}"></button>
                                 <a th:href="'javascript:cancelEditComment(\'' + ${comment.id} + '\');'"
                                    class="btn btn-primary"
-                                   style="margin-left: 10px">Cancel</a>
+                                   style="margin-left: 10px" th:text="#{product.cancel}"></a>
                             </div>
                         </form>
                     </div>
@@ -105,9 +106,9 @@
                                 <input class="form-control" required="required" name="commentText"/>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Reply</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{product.reply}"></button>
                                 <a th:href="'javascript:cancelReplyComment(\'' + ${comment.id} + '\');'" class="btn btn-primary"
-                                   style="margin-left: 10px">Cancel</a>
+                                   style="margin-left: 10px" th:text="#{product.cancel}"></a>
                             </div>
                         </form>
                     </div>
