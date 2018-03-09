@@ -1,13 +1,13 @@
-package ru.whatsleft.config;
+package ru.whatsleft.config.locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 @Configuration
 public class LocaleConfig extends WebMvcConfigurerAdapter {
@@ -25,9 +25,9 @@ public class LocaleConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean(name = "localeResolver")
-    public SessionLocaleResolver localeResolver() {
-        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(LocaleContextHolder.getLocale());
+    public ModifiedCookieLocaleResolver localeResolver() {
+        ModifiedCookieLocaleResolver localeResolver = new ModifiedCookieLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.ENGLISH);
         return localeResolver;
     }
 

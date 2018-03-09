@@ -72,6 +72,22 @@ function addInputAmount(id, defaultAmount) {
     $(removeButtonId).html("<i class=\"fas fa-angle-double-down\"></i> <span>" + inputAmount.toString() + "</span>")
 }
 
+function changeLocale(locale) {
+    let url = window.location.href;
+    if (url.indexOf('?') > -1) {
+        if (url.indexOf('lang=en') > -1) {
+            url = url.replace('lang=en', 'lang=' + locale);
+        } else if (url.indexOf('lang=ru') > -1) {
+            url = url.replace('lang=ru', 'lang=' + locale);
+        } else {
+            url += '&lang=' + locale;
+        }
+    } else {
+        url += '?lang=' + locale;
+    }
+    window.location.href = url;
+}
+
 function removeInputAmount(id, defaultAmount) {
     const inputId = "#input" + id;
     const addButtonId = "#addButton" + id;
